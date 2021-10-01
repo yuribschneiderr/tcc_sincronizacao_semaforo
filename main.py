@@ -2,37 +2,76 @@
 import pandas as pd
 import numpy as np
 
-#csv = pd.read_csv('sincro.csv', sep = ';', encoding='latin-1')
+data = pd.read_csv('./data/sincro.csv', sep = ';', encoding='latin-1')
 
-#print(csv.head(50))
+print(data.query('dia_semana == 35'))
 
-def func_horaria_velocidade(v_0, v_f, aceleracao):
-    tempo = (v_f - v_0)/aceleracao
+# mocks
+# TODO
+# Criar mocks para os dados abaixo
 
-    func_horaria_posicao(v_0, v_f, aceleracao, tempo)
+dia = 'dia aleatorio'
+hora = 'hora aleatoria'
 
-def func_horaria_posicao(v_0, v_f, aceleracao, tempo):
-    delta_s_0 = v_0 * tempo + (aceleracao * tempo**2/2)
+# TODO
+#def get_stage
+#    if hora >= 12
+#        stage_1(dia, hora)
+#
+#    if hora < 12
+#        stage_2(dia, hora)
 
-    movimento_uniforme(delta_s_0, v_f, tempo)
-    movimento_uniforme_2(v_f)
+#def stage_1(dia, hora)
+#    velocidade = data.query('dia_semana == $dia and hora_dia == $hora')
+#
+#    velocidade = range(35..60)
+#
+#    calc_horaria_velocidade(0, velocidade, 1)
 
-def movimento_uniforme(delta_s_0, v_f, tempo):
-    distancia = 140 # em metros
+#def stage_2(dia, hora)
+#    velocidade = data.query('dia_semana == dia and hora_dia == hora')
+#
+#    calc_horaria_velocidade(0, velocidade, 1)
 
-    delta_s_1 = distancia - delta_s_0
-    delta_t = delta_s_1/v_f
-    result = tempo + delta_t
+def calc_horaria_velocidade(velocidade_inicial, velocidade_final, aceleracao):
+    # tempo até o veiculo atigir a velocidade maxima
+    tempo = (velocidade_final - velocidade_inicial)/aceleracao
 
-    print("Resultado tempo 1: {0:f}".format(result))
+    # calculo da distancia até atingir a velocidade maxima.
+    calc_horaria_posicao(velocidade_inicial, velocidade_final, aceleracao, tempo)
 
-def movimento_uniforme_2(v_f):
-    distancia = 82 # em metros
+def calc_horaria_posicao(velocidade_inicial, velocidade_final, aceleracao, tempo):
+    # Distancia até o veiculo atingir a velocidade maxima
+    delta_s0 = velocidade_inicial * tempo + (aceleracao * tempo**2/2)
 
-    tempo = distancia/v_f
+    # calculo do tempo restante para a primeira meta de abertura
+    calc_movimento_uniforme_s1(delta_s0, velocidade_final, tempo)
+
+    # calculo do tempo restante para segunda meta de abertura
+    calc_movimento_uniforme_s2(velocidade_final)
+
+def calc_movimento_uniforme_s1(delta_s0, velocidade_final, tempo):
+    # distancia (em metros) do semáforo 0 até a meta de abertura de s1
+    distancia = 140
+
+    # distancia restante ate o veiculo atingir a primeira meta de abertura.
+    delta_s1 = distancia - delta_s0
+
+    # tempo restante até o veiculo atingir a primeira meta de abertura.
+    delta_t = delta_s1/velocidade_final
+
+    # tempo total para abertura do primeiro semáforo.
+    resultado_s1 = tempo + delta_t
+
+    print("Resultado tempo 1: {0:f}".format(resultado_s1))
+
+def calc_movimento_uniforme_s2(velocidade_final):
+    # distancia (em metros) da meta de abertura de s1 até a meta de abertura de s2
+    distancia = 82
+
+    # tempo restante até o veiculo atingir a segunda meta de abertura a partir da primeira meta
+    tempo = distancia/velocidade_final
 
     print("Resultado tempo 2: {0:f}".format(tempo))
 
-velocidade = 60/3.6
-
-func_horaria_velocidade(0, velocidade, 1)
+#calc_horaria_velocidade(0, velocidade, 1)
