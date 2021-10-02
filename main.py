@@ -16,7 +16,7 @@ def stage(velocidade, dia):
     # retorna hora e dia da semana baseado na velocidade
     consulta = data.query('v_media == "{}" & dia_semana == "{}"'.format(velocidade, dia))
 
-    print("\n Dia: {}, hora: {}".format(consulta.dia_semana.item(), consulta.hora_dia.item()))
+    # print("\n Dia: {}, hora: {}".format(consulta.dia_semana.item(), consulta.hora_dia.item()))
 
     # define paramentros para calculo de temporização
     if velocidade in intervalo:
