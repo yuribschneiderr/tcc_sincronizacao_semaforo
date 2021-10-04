@@ -1,28 +1,53 @@
 # import pandas
+import random
 import pandas as pd
-import numpy as np
-import time
 
 data = pd.read_csv('./data/sincro.csv', sep = ';', encoding='latin-1')
 
-# velocidade media sensor
-velocidade = 'velocidade aleatoria'
-dia = 'dia aleatorio'
+# mocks
+dias = [
+    'Segunda-feira',
+    'Terça-feira',
+    'Quarta-feira',
+    'Quinta-feira',
+    'Sexta-feira',
+    'Sábado',
+    'Domingo'
+]
 
-def stage(velocidade, dia):
+horas = [
+    "00:00", "00:30", "01:00", "01:30", "02:00", "02:30",
+    "03:00", "03:30", "04:00", "04:30", "05:00", "05:30",
+    "06:00", "06:30", "07:00", "07:30", "08:00", "08:30",
+    "09:00", "09:30", "10:00", "10:30", "11:00", "11:30",
+    "12:00", "12:30", "13:00", "13:30", "14:00", "14:30",
+    "15:00", "15:30", "16:00", "16:30", "17:00", "17:30",
+    "18:00", "18:30", "19:00", "19:30", "20:00", "20:30",
+    "21:00", "21:30", "22:00", "22:30", "23:00", "23:30"
+]
+
+hora = horas[random.randint(0, 47)]
+dia  = dias[random.randint(0, 6)]
+
+def stage(dia, hora):
     # define intervalo de velocidade para horario de pico
     intervalo = list(range(41))
 
-    # retorna hora e dia da semana baseado na velocidade
-    consulta = data.query('v_media == "{}" & dia_semana == "{}"'.format(velocidade, dia))
+    consulta = data.query('dia_semana == "{}" & hora_dia == "{}"'.format(dia, hora))
 
-    print("\n Dia: {}, hora: {}".format(consulta.dia_semana.item(), consulta.hora_dia.item()))
+    # retorna velocidade baseado no dia e hora
+    velocidade_media = consulta.v_media.item()
+
+    print("\n Dia: {}, hora: {}, velocidade media: {}".format(dia, hora, velocidade_media))
 
     # define paramentros para calculo de temporização
-    if velocidade in intervalo:
-        calc_horaria_velocidade(0, (max(intervalo)/3.6), 1)
+    if velocidade_media in intervalo:
+        calc_horaria_velocidade(0, converte_metros_segundo(max(intervalo)), 1)
     else:
-        calc_horaria_velocidade(0, (60/3.6), 1)
+        calc_horaria_velocidade(0, converte_metros_segundo(60), 1)
+
+def converte_metros_segundo(velocidade):
+    return velocidade/3.6
 
 def calc_horaria_velocidade(velocidade_inicial, velocidade_final, aceleracao):
     # tempo até o veiculo atigir a velocidade maxima
@@ -53,15 +78,17 @@ def calc_movimento_uniforme_s1(delta_s0, velocidade_final, tempo):
 
 
     # tempo total para abertura do primeiro semáforo.
-    resultado_s1 = tempo + delta_t
+    resultado_s1 = round(tempo + delta_t, 2)
 
-    print("\n Resultado tempo 1: {0:f}".format(resultado_s1))
+    print("\n Resultado tempo 1: {} segundos".format(resultado_s1))
 
 def calc_movimento_uniforme_s2(velocidade_final):
     # distancia (em metros) da meta de abertura de s1 até a meta de abertura de s2
     distancia = 82
 
     # tempo restante até o veiculo atingir a segunda meta de abertura a partir da primeira meta
-    tempo = distancia/velocidade_final
+    tempo = round(distancia/velocidade_final, 2)
 
-    print("\n Resultado tempo 2: {0:f}".format(tempo))
+    print("\n Resultado tempo 2: {} segundos".format(tempo))
+
+stage(dia, hora)
