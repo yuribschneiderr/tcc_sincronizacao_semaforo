@@ -31,7 +31,7 @@ dia  = dias[random.randint(0, 6)]
 
 def stage(dia, hora):
     # define intervalo de velocidade para horario de pico
-    intervalo = list(range(41))
+    intervalo = list(range(31))
 
     consulta = data.query('dia_semana == "{}" & hora_dia == "{}"'.format(dia, hora))
 
