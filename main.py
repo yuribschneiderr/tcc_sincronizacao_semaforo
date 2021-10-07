@@ -38,7 +38,7 @@ def stage(dia, hora):
     # retorna velocidade baseada no dia e hora
     velocidade_media = consulta.v_media.item()
 
-    print("\n Dia: {}, hora: {}, velocidade media: {}".format(dia, hora, velocidade_media))
+    print("\n Dia: {}, Hora: {}, Velocidade média: {} km/h".format(dia, hora, velocidade_media))
 
     # define parâmentros para cálculo de temporização
     if velocidade_media in intervalo:
@@ -70,7 +70,7 @@ def calc_horaria_posicao(velocidade_inicial, velocidade_final, aceleracao, tempo
     calc_movimento_uniforme_s3(velocidade_final)
 
 def calc_movimento_uniforme_s1(delta_s0, velocidade_final, tempo):
-    # distância (em metros) do semáforo 0 até a meta de abertura de s1
+    # distância (em metros) de B4 até a meta de abertura de B3
     distancia = 141.62
 
     # distância restante ate o veiculo atingir a primeira meta de abertura.
@@ -83,24 +83,24 @@ def calc_movimento_uniforme_s1(delta_s0, velocidade_final, tempo):
     # tempo total para abertura do primeiro semáforo.
     resultado_s1 = round(tempo + delta_t, 2)
 
-    print("\n Resultado tempo 1: {} segundos".format(resultado_s1))
+    print("\n Resultado tempo 1 (B4 para B3): {} segundos".format(resultado_s1))
 
 def calc_movimento_uniforme_s2(velocidade_final):
-    # distância (em metros) da meta de abertura de s1 até a meta de abertura de s2
+    # distância (em metros) da meta de abertura de B3 até a meta de abertura de B2
     distancia = 182.64
 
     # tempo restante até o veiculo atingir a segunda meta de abertura a partir da primeira meta
     tempo = round(distancia/velocidade_final, 2)
 
-    print("\n Resultado tempo 2: {} segundos".format(tempo))
+    print("\n Resultado tempo 2 (B3 para B2): {} segundos".format(tempo))
 
 def calc_movimento_uniforme_s3(velocidade_final):
-    # distância (em metros) da meta de abertura de s2 até a meta de abertura de s3
+    # distância (em metros) da meta de abertura de B2 até a meta de abertura de B1
     distancia = 80.28
 
     # tempo restante até o veiculo atingir a terceira meta de abertura a partir da segunda meta
     tempo = round(distancia/velocidade_final, 2)
 
-    print("\n Resultado tempo 3: {} segundos".format(tempo))
+    print("\n Resultado tempo 3 (B2 para B1): {} segundos".format(tempo))
 
 stage(dia, hora)
