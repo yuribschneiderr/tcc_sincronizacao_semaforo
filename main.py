@@ -30,17 +30,17 @@ hora = horas[random.randint(0, 47)]
 dia  = dias[random.randint(0, 6)]
 
 def stage(dia, hora):
-    # define intervalo de velocidade para horario de pico
+    # define intervalo de velocidade para horário de pico
     intervalo = list(range(31))
 
     consulta = data.query('dia_semana == "{}" & hora_dia == "{}"'.format(dia, hora))
 
-    # retorna velocidade baseado no dia e hora
+    # retorna velocidade baseada no dia e hora
     velocidade_media = consulta.v_media.item()
 
     print("\n Dia: {}, hora: {}, velocidade media: {}".format(dia, hora, velocidade_media))
 
-    # define paramentros para calculo de temporização
+    # define parâmentros para cálculo de temporização
     if velocidade_media in intervalo:
         calc_horaria_velocidade(0, converte_metros_segundo(max(intervalo)), 1)
     else:
@@ -50,27 +50,30 @@ def converte_metros_segundo(velocidade):
     return velocidade/3.6
 
 def calc_horaria_velocidade(velocidade_inicial, velocidade_final, aceleracao):
-    # tempo até o veiculo atigir a velocidade maxima
+    # tempo até o veículo atigir a velocidade máxima
     tempo = (velocidade_final - velocidade_inicial)/aceleracao
 
-    # calculo da distancia até atingir a velocidade maxima.
+    # cálculo da distancia até atingir a velocidade máxima.
     calc_horaria_posicao(velocidade_inicial, velocidade_final, aceleracao, tempo)
 
 def calc_horaria_posicao(velocidade_inicial, velocidade_final, aceleracao, tempo):
-    # distancia até o veiculo atingir a velocidade maxima
+    # distância até o veículo atingir a velocidade máxima
     delta_s0 = velocidade_inicial * tempo + (aceleracao * tempo**2/2)
 
-    # calculo do tempo restante para a primeira meta de abertura
+    # cálculo do tempo restante para a primeira meta de abertura
     calc_movimento_uniforme_s1(delta_s0, velocidade_final, tempo)
 
-    # calculo do tempo restante para segunda meta de abertura
+    # cálculo do tempo restante para segunda meta de abertura
     calc_movimento_uniforme_s2(velocidade_final)
 
-def calc_movimento_uniforme_s1(delta_s0, velocidade_final, tempo):
-    # distancia (em metros) do semáforo 0 até a meta de abertura de s1
-    distancia = 140
+    # cálculo do tempo restante para a terceira meta de abertura
+    calc_movimento_uniforme_s3(velocidade_final)
 
-    # distancia restante ate o veiculo atingir a primeira meta de abertura.
+def calc_movimento_uniforme_s1(delta_s0, velocidade_final, tempo):
+    # distância (em metros) do semáforo 0 até a meta de abertura de s1
+    distancia = 141.62
+
+    # distância restante ate o veiculo atingir a primeira meta de abertura.
     delta_s1 = distancia - delta_s0
 
     # tempo restante até o veiculo atingir a primeira meta de abertura.
@@ -83,12 +86,21 @@ def calc_movimento_uniforme_s1(delta_s0, velocidade_final, tempo):
     print("\n Resultado tempo 1: {} segundos".format(resultado_s1))
 
 def calc_movimento_uniforme_s2(velocidade_final):
-    # distancia (em metros) da meta de abertura de s1 até a meta de abertura de s2
-    distancia = 82
+    # distância (em metros) da meta de abertura de s1 até a meta de abertura de s2
+    distancia = 182.64
 
     # tempo restante até o veiculo atingir a segunda meta de abertura a partir da primeira meta
     tempo = round(distancia/velocidade_final, 2)
 
     print("\n Resultado tempo 2: {} segundos".format(tempo))
+
+def calc_movimento_uniforme_s3(velocidade_final):
+    # distância (em metros) da meta de abertura de s2 até a meta de abertura de s3
+    distancia = 80.28
+
+    # tempo restante até o veiculo atingir a terceira meta de abertura a partir da segunda meta
+    tempo = round(distancia/velocidade_final, 2)
+
+    print("\n Resultado tempo 3: {} segundos".format(tempo))
 
 stage(dia, hora)
