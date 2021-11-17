@@ -26,25 +26,23 @@ horas = [
     "21:00", "21:30", "22:00", "22:30", "23:00", "23:30"
 ]
 
+soma_total_a = 0
+soma_total_b = 0
+menor_tempo  = 0
+
 hora = horas[random.randint(0, 47)]
 dia  = dias[random.randint(0, 6)]
 
 def stage(dia, hora):
-    # define intervalo de velocidade para horário de pico
-    intervalo = list(range(31))
-
     consulta = data.query('dia_semana == "{}" & hora_dia == "{}"'.format(dia, hora))
 
     # retorna velocidade baseada no dia e hora
     velocidade_media = consulta.v_media.item()
 
-    print("\n Dia: {}, Hora: {}, Velocidade média: {} km/h".format(dia, hora, velocidade_media))
+    print("\n - Dia: {}, Hora: {}, Velocidade média: {} km/h".format(dia, hora, velocidade_media))
 
     # define parâmentros para cálculo de temporização
-    if velocidade_media in intervalo:
-        calc_horaria_velocidade(0, converte_metros_segundo(max(intervalo)), 1)
-    else:
-        calc_horaria_velocidade(0, converte_metros_segundo(60), 1)
+    calc_horaria_velocidade(0, converte_metros_segundo(velocidade_media), 1)
 
 def converte_metros_segundo(velocidade):
     return velocidade/3.6
@@ -60,6 +58,8 @@ def calc_horaria_posicao(velocidade_inicial, velocidade_final, aceleracao, tempo
     # distância até o veículo atingir a velocidade máxima
     delta_s0 = velocidade_inicial * tempo + (aceleracao * tempo**2/2)
 
+    print("\n ########### RESULTADO SEMÁFORO A ################")
+
     # cálculo do tempo restante para a primeira meta de abertura
     calc_movimento_uniforme_s1(delta_s0, velocidade_final, tempo)
 
@@ -68,6 +68,25 @@ def calc_horaria_posicao(velocidade_inicial, velocidade_final, aceleracao, tempo
 
     # cálculo do tempo restante para a terceira meta de abertura
     calc_movimento_uniforme_s3(velocidade_final)
+
+    #---------------------------------------------------------
+    print("\n ########### RESULTADO SEMÁFORO B ################")
+
+    calc_movimento_uniforme_t1(delta_s0, velocidade_final, tempo)
+
+    # cálculo do tempo restante para segunda meta de abertura
+    calc_movimento_uniforme_t2(velocidade_final)
+
+    # cálculo do tempo restante para a terceira meta de abertura
+    calc_movimento_uniforme_t3(velocidade_final)
+
+    print("\n ###################################################")
+
+    print("\n - Tempo total de abertura dos semáforos: {} segundos".format(menor_tempo))
+
+    print("\n - Tempo total A: {} segundos".format(soma_total_a))
+
+    print("\n - Tempo total B: {} segundos".format(soma_total_b))
 
 def calc_movimento_uniforme_s1(delta_s0, velocidade_final, tempo):
     # distância (em metros) de B4 até a meta de abertura de B3
@@ -79,11 +98,14 @@ def calc_movimento_uniforme_s1(delta_s0, velocidade_final, tempo):
     # tempo restante até o veiculo atingir a primeira meta de abertura.
     delta_t = delta_s1/velocidade_final
 
-
     # tempo total para abertura do primeiro semáforo.
     resultado_s1 = round(tempo + delta_t, 2)
 
-    print("\n Resultado tempo 1 (B4 para B3): {} segundos".format(resultado_s1))
+    global soma_total_a
+
+    soma_total_a += resultado_s1
+
+    print("\n - Resultado tempo 1 (A4 para A3): {} segundos".format(resultado_s1))
 
 def calc_movimento_uniforme_s2(velocidade_final):
     # distância (em metros) da meta de abertura de B3 até a meta de abertura de B2
@@ -92,7 +114,11 @@ def calc_movimento_uniforme_s2(velocidade_final):
     # tempo restante até o veiculo atingir a segunda meta de abertura a partir da primeira meta
     tempo = round(distancia/velocidade_final, 2)
 
-    print("\n Resultado tempo 2 (B3 para B2): {} segundos".format(tempo))
+    global soma_total_a
+
+    soma_total_a += tempo
+
+    print("\n - Resultado tempo 2 (A3 para A2): {} segundos".format(tempo))
 
 def calc_movimento_uniforme_s3(velocidade_final):
     # distância (em metros) da meta de abertura de B2 até a meta de abertura de B1
@@ -101,6 +127,56 @@ def calc_movimento_uniforme_s3(velocidade_final):
     # tempo restante até o veiculo atingir a terceira meta de abertura a partir da segunda meta
     tempo = round(distancia/velocidade_final, 2)
 
-    print("\n Resultado tempo 3 (B2 para B1): {} segundos".format(tempo))
+    global soma_total_a, menor_tempo
+
+    menor_tempo += tempo * 3
+    soma_total_a += tempo
+
+    print("\n - Resultado tempo 3 (A2 para A1): {} segundos".format(tempo))
+
+def calc_movimento_uniforme_t1(delta_s0, velocidade_final, tempo):
+    # distância (em metros) de B4 até a meta de abertura de B3
+    distancia = 70.40
+
+    # distância restante ate o veiculo atingir a primeira meta de abertura.
+    delta_s1 = distancia - delta_s0
+
+    # tempo restante até o veiculo atingir a primeira meta de abertura.
+    delta_t = delta_s1/velocidade_final
+
+    # tempo total para abertura do primeiro semáforo.
+    resultado_s1 = round(tempo + delta_t, 2)
+
+    global soma_total_b
+
+    soma_total_b += resultado_s1
+
+    print("\n - Resultado tempo 1 (B1 para B2): {} segundos".format(resultado_s1))
+
+def calc_movimento_uniforme_t2(velocidade_final):
+    # distância (em metros) da meta de abertura de B3 até a meta de abertura de B2
+    distancia = 182.64
+
+    # tempo restante até o veiculo atingir a segunda meta de abertura a partir da primeira meta
+    tempo = round(distancia/velocidade_final, 2)
+
+    global soma_total_b
+
+    soma_total_b += tempo
+
+    print("\n - Resultado tempo 2 (B2 para B3): {} segundos".format(tempo))
+
+def calc_movimento_uniforme_t3(velocidade_final):
+    # distância (em metros) da meta de abertura de B2 até a meta de abertura de B1
+    distancia = 141.62
+
+    # tempo restante até o veiculo atingir a terceira meta de abertura a partir da segunda meta
+    tempo = round(distancia/velocidade_final, 2)
+
+    global soma_total_b
+
+    soma_total_b += tempo
+
+    print("\n - Resultado tempo 3 (B3 para B4): {} segundos".format(tempo))
 
 stage(dia, hora)
