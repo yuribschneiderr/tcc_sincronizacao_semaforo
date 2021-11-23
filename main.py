@@ -34,6 +34,9 @@ hora = horas[random.randint(0, 47)]
 dia  = dias[random.randint(0, 6)]
 
 def stage(dia, hora):
+    # define intervalo de velocidade para horários de pico
+    intervalo = list(range(31))
+
     consulta = data.query('dia_semana == "{}" & hora_dia == "{}"'.format(dia, hora))
 
     # retorna velocidade baseada no dia e hora
@@ -42,7 +45,10 @@ def stage(dia, hora):
     print("\n - Dia: {}, Hora: {}, Velocidade média: {} km/h".format(dia, hora, velocidade_media))
 
     # define parâmentros para cálculo de temporização
-    calc_horaria_velocidade(0, converte_metros_segundo(velocidade_media), 1)
+    if velocidade_media in intervalo:
+        calc_horaria_velocidade(0, converte_metros_segundo(max(intervalo)), 1)
+    else:
+        calc_horaria_velocidade(0, converte_metros_segundo(60), 1)
 
 def converte_metros_segundo(velocidade):
     return velocidade/3.6
