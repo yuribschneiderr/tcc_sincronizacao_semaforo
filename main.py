@@ -78,6 +78,7 @@ def calc_horaria_posicao(velocidade_inicial, velocidade_final, aceleracao, tempo
     #---------------------------------------------------------
     print("\n ########### RESULTADO SEMÁFORO B ################")
 
+    # cálculo do tempo restante para a primeira meta de abertura
     calc_movimento_uniforme_t1(delta_s0, velocidade_final, tempo)
 
     # cálculo do tempo restante para segunda meta de abertura
@@ -95,7 +96,7 @@ def calc_horaria_posicao(velocidade_inicial, velocidade_final, aceleracao, tempo
     print("\n - Tempo total B: {} segundos".format(soma_total_b))
 
 def calc_movimento_uniforme_s1(delta_s0, velocidade_final, tempo):
-    # distância (em metros) de B4 até a meta de abertura de B3
+    # distância (em metros) de A4 até a meta de abertura de A3
     distancia = 141.62
 
     # distância restante ate o veiculo atingir a primeira meta de abertura.
@@ -114,7 +115,7 @@ def calc_movimento_uniforme_s1(delta_s0, velocidade_final, tempo):
     print("\n - Resultado tempo 1 (A4 para A3): {} segundos".format(resultado_s1))
 
 def calc_movimento_uniforme_s2(velocidade_final):
-    # distância (em metros) da meta de abertura de B3 até a meta de abertura de B2
+    # distância (em metros) da meta de abertura de A3 até a meta de abertura de A2
     distancia = 182.64
 
     # tempo restante até o veiculo atingir a segunda meta de abertura a partir da primeira meta
@@ -127,7 +128,7 @@ def calc_movimento_uniforme_s2(velocidade_final):
     print("\n - Resultado tempo 2 (A3 para A2): {} segundos".format(tempo))
 
 def calc_movimento_uniforme_s3(velocidade_final):
-    # distância (em metros) da meta de abertura de B2 até a meta de abertura de B1
+    # distância (em metros) da meta de abertura de A2 até a meta de abertura de A1
     distancia = 80.28
 
     # tempo restante até o veiculo atingir a terceira meta de abertura a partir da segunda meta
@@ -141,7 +142,7 @@ def calc_movimento_uniforme_s3(velocidade_final):
     print("\n - Resultado tempo 3 (A2 para A1): {} segundos".format(tempo))
 
 def calc_movimento_uniforme_t1(delta_s0, velocidade_final, tempo):
-    # distância (em metros) de B4 até a meta de abertura de B3
+    # distância (em metros) de B1 até a meta de abertura de B2
     distancia = 70.40
 
     # distância restante ate o veiculo atingir a primeira meta de abertura.
@@ -160,7 +161,7 @@ def calc_movimento_uniforme_t1(delta_s0, velocidade_final, tempo):
     print("\n - Resultado tempo 1 (B1 para B2): {} segundos".format(resultado_s1))
 
 def calc_movimento_uniforme_t2(velocidade_final):
-    # distância (em metros) da meta de abertura de B3 até a meta de abertura de B2
+    # distância (em metros) da meta de abertura de B2 até a meta de abertura de B3
     distancia = 182.64
 
     # tempo restante até o veiculo atingir a segunda meta de abertura a partir da primeira meta
@@ -173,7 +174,7 @@ def calc_movimento_uniforme_t2(velocidade_final):
     print("\n - Resultado tempo 2 (B2 para B3): {} segundos".format(tempo))
 
 def calc_movimento_uniforme_t3(velocidade_final):
-    # distância (em metros) da meta de abertura de B2 até a meta de abertura de B1
+    # distância (em metros) da meta de abertura de B3 até a meta de abertura de B4
     distancia = 141.62
 
     # tempo restante até o veiculo atingir a terceira meta de abertura a partir da segunda meta
